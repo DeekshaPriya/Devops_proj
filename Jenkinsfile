@@ -5,7 +5,8 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git 'https://github.com/DeekshaPriya/Devops_proj.git'
+                git branch: 'main',
+                    url: 'https://github.com/DeekshaPriya/Devops_proj.git'
             }
         }
 
@@ -25,8 +26,8 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying with Docker Compose...'
-                sh 'docker compose up -d --build'
+                echo 'Deploying container...'
+                sh 'docker run -d -p 5000:5000 --name mini-drive-app mini-drive-flask'
             }
         }
     }
@@ -36,7 +37,7 @@ pipeline {
             echo 'Pipeline succeeded! Mini Drive is live.'
         }
         failure {
-            echo 'Pipeline failed. Check the logs above.'
+            echo 'Pipeline failed. Check the logs.'
         }
     }
 }
