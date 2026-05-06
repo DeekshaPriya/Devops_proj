@@ -17,7 +17,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # ── Auth ──────────────────────────────────────────────
-USERS = {'admin': 'password123', 'student': 'university'}
+USERS = {'admin': 'password123', 'student': 'uni123'}
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
