@@ -83,3 +83,17 @@ def delete(filename):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+# ── Download ──────────────────────────────────────────
+@app.route('/download/<filename>')
+def download(filename):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user = session['user']
+
+    return send_from_directory(
+        os.path.join(UPLOAD_FOLDER, user),
+        filename,
+        as_attachment=True
+    )
