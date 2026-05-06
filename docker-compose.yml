@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+
+  flask:
+    build: ./app
+    container_name: flask_app
+    volumes:
+      - uploads_data:/uploads
+    depends_on:
+      - redis
+    networks:
+      - minidrive-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_db
+    networks:
+      - minidrive-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - uploads_data:/uploads
+    depends_on:
+      - flask
+    networks:
+      - minidrive-net
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins_ci
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - minidrive-net
+
+volumes:
+  uploads_data:
+  jenkins_data:
+
+networks:
+  minidrive-net:
+    driver: bridge
