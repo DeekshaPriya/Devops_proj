@@ -5,29 +5,28 @@ pipeline {
 
         stage('Clone') {
             steps {
-                echo 'Cloning repository...'
-                checkout scm
+                git 'https://github.com/DeekshaPriya/Devops_proj.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo 'Building Flask Docker image...'
-                bat 'docker build -t mini-drive-flask ./app'
+                sh 'docker build -t mini-drive-flask ./app'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running basic test...'
-                bat 'docker run --rm mini-drive-flask python -c "import flask; print(\'Flask OK\')"'
+                sh 'docker run --rm mini-drive-flask python -c "import flask; print(\\"Flask OK\\")"'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying with Docker Compose...'
-                bat 'docker compose up -d --build'
+                sh 'docker compose up -d --build'
             }
         }
     }
